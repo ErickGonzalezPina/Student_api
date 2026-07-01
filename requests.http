@@ -1,0 +1,42 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+### Get all Students
+GET http://localhost:8080/api/v1/students
+
+### Get student by ID
+GET http://localhost:8080/api/v1/students/1
+
+
+### Post
+POST http://localhost:8080/api/v1/students
+Content-Type: application/json
+
+{
+  "name": "erick",
+  "course": "CSC 400",
+  "semester": "Fall 2025"
+}
+
+### update a student
+PUT http://localhost:8080/api/v1/students/1
+Content-Type: application/json
+
+{
+  "name": "Robert",
+  "course": "CSC 300",
+  "semester": "Spring 2027"
+}
+
+### update student attribute
+PATCH http://localhost:8080/api/v1/students/1
+Content-Type: application/json
+
+{
+  "name": "Jose Ramos"
+}
+
+### Delete Student
+DELETE http://localhost:8080/api/v1/students/1
+
