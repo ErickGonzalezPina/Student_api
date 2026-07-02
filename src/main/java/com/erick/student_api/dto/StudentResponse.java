@@ -10,16 +10,18 @@ import lombok.Setter;
 @NoArgsConstructor
 public class StudentResponse {
     // Fields
-    private Long studentID;
+    private long studentID;
     private String name;
     private String semester;
     private String course;
+    private String email;
 
     // Constructor
-    public StudentResponse(Long studentID, String name, String semester, String course) {
+    public StudentResponse(long studentID, String name, String semester, String course, String email) {
         this.studentID = studentID;
         this.name = name;
         this.semester = semester;
         this.course = course;
+        this.email = email;
     }
 }

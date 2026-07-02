@@ -3,11 +3,16 @@ package com.erick.student_api.service;
 import com.erick.student_api.repository.StudentRepository;
 import com.erick.student_api.dto.*;
 import com.erick.student_api.model.Student;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Validated
 @Service
 public class StudentService {
 
@@ -23,13 +28,16 @@ public class StudentService {
                 student.getStudentID(),
                 student.getName(),
                 student.getSemester(),
-                student.getCourse());
+                student.getCourse(),
+                student.getEmail()
+        );
     }
     public Student mapToStudent(StudentRequest request) {
         return new Student(
                 request.getName(),
                 request.getSemester(),
-                request.getCourse()
+                request.getCourse(),
+                request.getEmail()
         );
     }
 
@@ -44,33 +52,34 @@ public class StudentService {
         return response;
     }
 
-    public StudentResponse getStudentById(long id) {
+    public StudentResponse getStudentById(@Positive long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         return mapToStudentResponse(student);
     }
 
     // POST Request Logic
-    public StudentResponse addStudent(StudentRequest request) {
+    public StudentResponse addStudent(@Valid StudentRequest request) {
         Student savedStudent = studentRepository.save(mapToStudent(request));
         return mapToStudentResponse(savedStudent);
     }
 
     // PUT Request Logic
-    public StudentResponse updateStudent(Long id, StudentRequest request) {
+    public StudentResponse updateStudent(@Positive long id, @Valid StudentRequest request) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
         student.setName(request.getName());
         student.setCourse(request.getCourse());
         student.setSemester(request.getSemester());
+        student.setEmail(request.getEmail());
 
         studentRepository.save(student);
         return mapToStudentResponse(student);
     }
 
     // PATCH Request Logic
-    public StudentResponse updateStudentAttribute(Long id, StudentRequest request) {
+    public StudentResponse updateStudentAttribute(@Positive long id, @Valid StudentRequest request) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
@@ -83,12 +92,15 @@ public class StudentService {
         else if (request.getSemester() != null) {
             student.setSemester(request.getSemester());
         }
+        else if (request.getEmail() != null) {
+            student.setEmail(request.getEmail());
+        }
         studentRepository.save(student);
         return mapToStudentResponse(student);
     }
 
     // DELETE Logic
-    public void deleteStudent(Long id) {
+    public void deleteStudent(@Positive long id) {
         studentRepository.deleteById(id);
     }
 }

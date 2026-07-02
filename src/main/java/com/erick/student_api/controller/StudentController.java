@@ -5,10 +5,14 @@ import com.erick.student_api.model.Student;
 import com.erick.student_api.dto.*;
 import com.erick.student_api.service.StudentService;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 
+@Validated
 @RestController
 @RequestMapping("api/v1/students")
 public class StudentController {
@@ -26,32 +30,32 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public StudentResponse getStudentById(@PathVariable long id) {
+    public StudentResponse getStudentById(@PathVariable @Positive long id) {
         return service.getStudentById(id);
     }
 
     // POST Requests
     @PostMapping
-    public StudentResponse addStudent(@RequestBody StudentRequest request) {
+    public StudentResponse addStudent(@Valid @RequestBody StudentRequest request) {
         return service.addStudent(request);
     }
 
     // PUT & PATCH Requests
     @PutMapping("/{id}")
-    public StudentResponse updateStudent(@PathVariable Long id, @RequestBody StudentRequest request) {
+    public StudentResponse updateStudent(
+            @PathVariable @Positive long id, @Valid @RequestBody StudentRequest request) {
         return service.updateStudent(id, request);
     }
 
     @PatchMapping("/{id}")
-    public StudentResponse updateStudentAttribute(@PathVariable Long id, @RequestBody StudentRequest request) {
+    public StudentResponse updateStudentAttribute(
+            @PathVariable @Positive long id, @Valid @RequestBody StudentRequest request) {
         return service.updateStudentAttribute(id, request);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
-    public void deleteStudent(@PathVariable Long id) {
+    public void deleteStudent(@PathVariable @Positive long id) {
         service.deleteStudent(id);
     }
-
-
   }

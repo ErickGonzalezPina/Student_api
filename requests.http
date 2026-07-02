@@ -6,7 +6,7 @@ GET https://examples.http-client.intellij.net/get
 GET http://localhost:8080/api/v1/students
 
 ### Get student by ID
-GET http://localhost:8080/api/v1/students/1
+GET http://localhost:8080/api/v1/students/7
 
 
 ### Post
@@ -14,23 +14,25 @@ POST http://localhost:8080/api/v1/students
 Content-Type: application/json
 
 {
-  "name": "erick",
+  "name": "Jacob",
   "course": "CSC 400",
-  "semester": "Fall 2025"
+  "semester": "Fall 2025",
+  "email": "erick@gmail.com"
 }
 
 ### update a student
-PUT http://localhost:8080/api/v1/students/1
+PUT http://localhost:8080/api/v1/students/7
 Content-Type: application/json
 
 {
-  "name": "Robert",
-  "course": "CSC 300",
-  "semester": "Spring 2027"
+  "name": "Frederick",
+  "course": "CSC 400",
+  "semester": "Spring 2027",
+  "email": "brayanFred@gmail.com"
 }
 
 ### update student attribute
-PATCH http://localhost:8080/api/v1/students/1
+PATCH http://localhost:8080/api/v1/students/7
 Content-Type: application/json
 
 {

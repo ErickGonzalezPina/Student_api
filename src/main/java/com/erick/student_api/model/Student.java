@@ -22,11 +22,14 @@ public class Student {
     private String semester;
     @Setter
     private String course;
+    @Setter
+    private String email;
 
     // Constructor
-    public Student(String name, String semester, String course) {
+    public Student(String name, String semester, String course, String email) {
         this.name = name;
         this.semester = semester;
         this.course = course;
+        this.email = email;
     }
 }
