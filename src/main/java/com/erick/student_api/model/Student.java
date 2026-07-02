@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "students")
 public class Student {
+
     // Fields
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

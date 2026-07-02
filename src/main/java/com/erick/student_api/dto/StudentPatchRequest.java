@@ -1,33 +1,29 @@
 package com.erick.student_api.dto;
 
-import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudentRequest {
+public class StudentPatchRequest {
 
     // Fields
-    @NotBlank(message = "Need name")
+    @Size(min=1, max=100, message="Name can't be empty")
     private String name;
 
-    @NotBlank
     @Pattern(regexp = "^(Spring|Summer|Fall)$", message = "Semester must be Spring, Summer, or Fall")
     private String semester;
 
-    @NotBlank
+    @Size(min=1, max=50, message="Course cant be empty")
     private String course;
 
-    @NotBlank
-    @Email
+    @Email(message="Enter a valid email format")
     private String email;
 
     // Constructor
-    public StudentRequest(String name, String semester, String course, String email) {
+    public StudentPatchRequest(String name, String semester, String course, String email) {
         this.name = name;
         this.semester = semester;
         this.course = course;

@@ -79,20 +79,20 @@ public class StudentService {
     }
 
     // PATCH Request Logic
-    public StudentResponse updateStudentAttribute(@Positive long id, @Valid StudentRequest request) {
+    public StudentResponse updateStudentAttribute(@Positive long id, @Valid StudentPatchRequest request) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
         if (request.getName() != null) {
             student.setName(request.getName());
         }
-        else if (request.getCourse() != null) {
+        if (request.getCourse() != null) {
             student.setCourse(request.getCourse());
         }
-        else if (request.getSemester() != null) {
+        if (request.getSemester() != null) {
             student.setSemester(request.getSemester());
         }
-        else if (request.getEmail() != null) {
+        if (request.getEmail() != null) {
             student.setEmail(request.getEmail());
         }
         studentRepository.save(student);

@@ -1,7 +1,5 @@
 package com.erick.student_api.controller;
 
-import com.erick.student_api.dto.StudentResponse;
-import com.erick.student_api.model.Student;
 import com.erick.student_api.dto.*;
 import com.erick.student_api.service.StudentService;
 
@@ -49,7 +47,7 @@ public class StudentController {
 
     @PatchMapping("/{id}")
     public StudentResponse updateStudentAttribute(
-            @PathVariable @Positive long id, @Valid @RequestBody StudentRequest request) {
+            @PathVariable @Positive long id, @Valid @RequestBody StudentPatchRequest request) {
         return service.updateStudentAttribute(id, request);
     }
 
