@@ -43,13 +43,7 @@ public class StudentService {
 
     // GET Requests Logic
     public List<StudentResponse> getAllStudents() {
-        List<Student> students = studentRepository.findAll();
-        List<StudentResponse> response = new ArrayList<>();
-
-        for (Student student: students) {
-            response.add(mapToStudentResponse(student));
-        }
-        return response;
+        return studentRepository.findAll().stream().map(this::mapToStudentResponse).toList();
     }
 
     public StudentResponse getStudentById(@Positive long id) {
