@@ -2,6 +2,7 @@ package com.erick.student_api.service;
 
 import com.erick.student_api.repository.StudentRepository;
 import com.erick.student_api.dto.*;
+import com.erick.student_api.exception.*;
 import com.erick.student_api.model.Student;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -48,7 +49,7 @@ public class StudentService {
 
     public StudentResponse getStudentById(@Positive long id) {
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException(id));
         return mapToStudentResponse(student);
     }
 
@@ -61,7 +62,7 @@ public class StudentService {
     // PUT Request Logic
     public StudentResponse updateStudent(@Positive long id, @Valid StudentRequest request) {
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException(id));
 
         student.setName(request.getName());
         student.setCourse(request.getCourse());
@@ -75,7 +76,7 @@ public class StudentService {
     // PATCH Request Logic
     public StudentResponse updateStudentAttribute(@Positive long id, @Valid StudentPatchRequest request) {
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException(id));
 
         if (request.getName() != null) {
             student.setName(request.getName());

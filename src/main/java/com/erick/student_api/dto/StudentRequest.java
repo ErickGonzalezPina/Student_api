@@ -12,7 +12,7 @@ import lombok.Setter;
 public class StudentRequest {
 
     // Fields
-    @NotBlank(message = "Need name")
+    @NotBlank
     private String name;
 
     @NotBlank

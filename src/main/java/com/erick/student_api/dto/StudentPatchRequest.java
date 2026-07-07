@@ -19,7 +19,7 @@ public class StudentPatchRequest {
     @Size(min=1, max=50, message="Course cant be empty")
     private String course;
 
-    @Email(message="Enter a valid email format")
+    @Email
     private String email;
 
     // Constructor
