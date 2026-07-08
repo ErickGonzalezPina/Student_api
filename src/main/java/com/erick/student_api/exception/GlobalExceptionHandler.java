@@ -31,26 +31,28 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
+        // Handle Exceptions caused by @Valid
 
         // populate hashmap with errors
-        Map<String, String> validationErrors = new HashMap<>();
+        Map<String, String> errors = new HashMap<>();
 
         ex.getBindingResult()
                 .getFieldErrors()
-                .forEach(error -> validationErrors.put(error.getField(), error.getDefaultMessage()));
+                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 400,
                 "Bad Request",
                 "Validation failed",
-                validationErrors
+                errors
         );
         return ResponseEntity.badRequest().body(error);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex) {
+        // Handled exceptions caused by @validated
 
         Map<String, String> errors = new HashMap<>();
 
@@ -69,5 +71,17 @@ public class GlobalExceptionHandler {
                 errors
         );
         return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                500,
+                "Internal Server Error",
+                "The server encountered an unexpected error.",
+                Map.of()
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
