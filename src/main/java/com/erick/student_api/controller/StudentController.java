@@ -5,8 +5,12 @@ import com.erick.student_api.service.StudentService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 import java.util.*;
 
 
@@ -23,37 +27,52 @@ public class StudentController {
 
     // GET Requests
     @GetMapping
-    public List<StudentResponse> getAllStudents() {
-        return service.getAllStudents();
+    public ResponseEntity<List<StudentResponse>> getAllStudents() {
+
+        return ResponseEntity.ok(service.getAllStudents());
     }
 
     @GetMapping("/{id}")
-    public StudentResponse getStudentById(@PathVariable @Positive long id) {
-        return service.getStudentById(id);
+    public ResponseEntity<StudentResponse> getStudentById(@PathVariable @Positive long id) {
+
+        return ResponseEntity.ok(service.getStudentById(id));
     }
 
     // POST Requests
     @PostMapping
-    public StudentResponse addStudent(@Valid @RequestBody StudentRequest request) {
-        return service.addStudent(request);
+    public ResponseEntity<StudentResponse> addStudent(@Valid @RequestBody StudentRequest request) {
+
+        StudentResponse student = service.addStudent(request);
+        URI location = URI.create("/api/v1/students/" + student.getStudentID());
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .header("Location", location.toString())
+                .body(student);
     }
 
     // PUT & PATCH Requests
     @PutMapping("/{id}")
-    public StudentResponse updateStudent(
-            @PathVariable @Positive long id, @Valid @RequestBody StudentRequest request) {
-        return service.updateStudent(id, request);
+    public ResponseEntity<StudentResponse> updateStudent(
+            @PathVariable @Positive long id,
+            @Valid @RequestBody StudentRequest request) {
+
+        return ResponseEntity.ok(service.updateStudent(id, request));
     }
 
     @PatchMapping("/{id}")
-    public StudentResponse updateStudentAttribute(
-            @PathVariable @Positive long id, @Valid @RequestBody StudentPatchRequest request) {
-        return service.updateStudentAttribute(id, request);
+    public ResponseEntity<StudentResponse> updateStudentAttribute(
+            @PathVariable @Positive long id,
+            @Valid @RequestBody StudentPatchRequest request) {
+
+        return ResponseEntity.ok(service.updateStudentAttribute(id, request));
     }
 
     // DELETE
     @DeleteMapping("/{id}")
-    public void deleteStudent(@PathVariable @Positive long id) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable @Positive long id) {
+
         service.deleteStudent(id);
+        return ResponseEntity.noContent().build();
     }
   }
