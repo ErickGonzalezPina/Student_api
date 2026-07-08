@@ -17,7 +17,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleStudentNotFoundException(StudentNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> onStudentNotFound(StudentNotFoundException ex) {
 
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> onValidationFailure(MethodArgumentNotValidException ex) {
         // Handle Exceptions caused by @Valid
 
         // populate hashmap with errors
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex) {
+    public ResponseEntity<ErrorResponse> onConstraintViolation(ConstraintViolationException ex) {
         // Handled exceptions caused by @validated
 
         Map<String, String> errors = new HashMap<>();
@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
+    public ResponseEntity<ErrorResponse> onGenericException(Exception ex) {
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 500,
