@@ -28,13 +28,11 @@ public class StudentController {
     // GET Requests
     @GetMapping
     public ResponseEntity<List<StudentResponse>> getAllStudents() {
-
         return ResponseEntity.ok(service.getAllStudents());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<StudentResponse> getStudentById(@PathVariable @Positive long id) {
-
         return ResponseEntity.ok(service.getStudentById(id));
     }
 

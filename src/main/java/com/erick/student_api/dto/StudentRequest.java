@@ -1,5 +1,6 @@
 package com.erick.student_api.dto;
 
+import com.erick.student_api.validation.SchoolEmail;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class StudentRequest {
 
     @NotBlank
     @Email
+    @SchoolEmail
     private String email;
 
     // Constructor

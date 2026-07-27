@@ -1,6 +1,7 @@
 package com.erick.student_api.dto;
 
 
+import com.erick.student_api.validation.SchoolEmail;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class StudentPatchRequest {
     private String course;
 
     @Email
+    @SchoolEmail
     private String email;
 
     // Constructor

@@ -34,3 +34,6 @@ build/
 
 ### requests ###
 *.http
+
+### others ###
+.DS_Store
