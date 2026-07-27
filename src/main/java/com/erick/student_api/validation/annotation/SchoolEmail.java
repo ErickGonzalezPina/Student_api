@@ -1,5 +1,6 @@
-package com.erick.student_api.validation;
+package com.erick.student_api.validation.annotation;
 
+import com.erick.student_api.validation.validator.SchoolEmailValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

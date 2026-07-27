@@ -1,6 +1,7 @@
 package com.erick.student_api.dto;
 
-import com.erick.student_api.validation.SchoolEmail;
+import com.erick.student_api.validation.annotation.SchoolEmail;
+import com.erick.student_api.validation.annotation.ValidSemester;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ public class StudentRequest {
     private String name;
 
     @NotBlank
-    @Pattern(regexp = "^(Spring|Summer|Fall)$", message = "Semester must be Spring, Summer, or Fall")
+    @ValidSemester
     private String semester;
 
     @NotBlank
