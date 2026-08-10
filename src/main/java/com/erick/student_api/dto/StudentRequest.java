@@ -17,14 +17,12 @@ public class StudentRequest {
     @NotBlank
     private String name;
 
-    @NotBlank
     @ValidSemester
     private String semester;
 
     @NotBlank
     private String course;
 
-    @NotBlank
     @Email
     @SchoolEmail
     private String email;

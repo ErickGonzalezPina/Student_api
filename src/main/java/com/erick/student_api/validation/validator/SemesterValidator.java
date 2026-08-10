@@ -11,7 +11,7 @@ public class SemesterValidator implements ConstraintValidator<ValidSemester, Str
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null) {
+        if (value == null || value.isBlank()) {
             return false;
         }
         return VALID_SEMESTERS.contains(value);
