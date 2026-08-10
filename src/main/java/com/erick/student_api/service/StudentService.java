@@ -35,10 +35,10 @@ public class StudentService {
     }
     public Student mapToStudent(StudentRequest request) {
         return new Student(
-                request.getName(),
-                request.getSemester(),
-                request.getCourse(),
-                request.getEmail()
+                request.name(),
+                request.semester(),
+                request.course(),
+                request.email()
         );
     }
 
@@ -64,10 +64,10 @@ public class StudentService {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException(id));
 
-        student.setName(request.getName());
-        student.setCourse(request.getCourse());
-        student.setSemester(request.getSemester());
-        student.setEmail(request.getEmail());
+        student.setName(request.name());
+        student.setCourse(request.course());
+        student.setSemester(request.semester());
+        student.setEmail(request.email());
 
         studentRepository.save(student);
         return mapToStudentResponse(student);
@@ -78,17 +78,17 @@ public class StudentService {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException(id));
 
-        if (request.getName() != null) {
-            student.setName(request.getName());
+        if (request.name() != null) {
+            student.setName(request.name());
         }
-        if (request.getCourse() != null) {
-            student.setCourse(request.getCourse());
+        if (request.course() != null) {
+            student.setCourse(request.course());
         }
-        if (request.getSemester() != null) {
-            student.setSemester(request.getSemester());
+        if (request.semester() != null) {
+            student.setSemester(request.semester());
         }
-        if (request.getEmail() != null) {
-            student.setEmail(request.getEmail());
+        if (request.email() != null) {
+            student.setEmail(request.email());
         }
         studentRepository.save(student);
         return mapToStudentResponse(student);

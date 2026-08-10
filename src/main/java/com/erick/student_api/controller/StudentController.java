@@ -41,7 +41,7 @@ public class StudentController {
     public ResponseEntity<StudentResponse> addStudent(@Valid @RequestBody StudentRequest request) {
 
         StudentResponse student = service.addStudent(request);
-        URI location = URI.create("/api/v1/students/" + student.getStudentID());
+        URI location = URI.create("/api/v1/students/" + student.studentID());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
