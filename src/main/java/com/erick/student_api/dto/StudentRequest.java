@@ -1,5 +1,6 @@
 package com.erick.student_api.dto;
 
+import com.erick.student_api.enums.Semester;
 import com.erick.student_api.validation.annotation.SchoolEmail;
 import jakarta.validation.constraints.*;
 
@@ -10,8 +11,8 @@ public record StudentRequest (
     @NotBlank
     String name,
 
-
-    String semester,
+    @NotNull
+    Semester semester,
 
     @NotBlank
     String course,
