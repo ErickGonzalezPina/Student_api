@@ -4,6 +4,7 @@ import com.erick.student_api.dto.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,6 +16,18 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> onBadRequest(HttpMessageNotReadableException ex) {
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                400,
+                "Bad Request",
+                "Invalid semester value. Allowed values: SPRING, SUMMER, FALL.",
+                Map.of()
+        );
+        return ResponseEntity.badRequest().body(error);
+    }
 
     @ExceptionHandler(StudentNotFoundException.class)
     public ResponseEntity<ErrorResponse> onStudentNotFound(StudentNotFoundException ex) {
