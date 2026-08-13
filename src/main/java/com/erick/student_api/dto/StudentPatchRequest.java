@@ -11,7 +11,7 @@ public record StudentPatchRequest (
     @Size(min=1, max=100, message="Name can't be empty")
     String name,
 
-    @ValidSemester
+
     String semester,
 
     @Size(min=1, max=50, message="Course cant be empty")
