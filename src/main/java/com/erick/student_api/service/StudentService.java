@@ -94,6 +94,9 @@ public class StudentService {
 
     // DELETE Logic
     public void deleteStudent(@Positive long id) {
+        if (!studentRepository.existsById(id)) {
+            throw new StudentNotFoundException(id);
+        }
         studentRepository.deleteById(id);
     }
 }
