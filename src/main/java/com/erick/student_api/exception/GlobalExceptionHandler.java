@@ -2,6 +2,8 @@ package com.erick.student_api.exception;
 
 import com.erick.student_api.dto.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,9 +18,13 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    // Logger
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> onBadRequest(HttpMessageNotReadableException ex) {
+        log.warn("Response body could not be deserialized");
+
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 400,
@@ -88,6 +94,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> onGenericException(Exception ex) {
+        log.error("Unexpected server error", ex);
+
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 500,
