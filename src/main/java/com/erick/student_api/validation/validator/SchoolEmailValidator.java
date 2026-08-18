@@ -8,8 +8,8 @@ public class SchoolEmailValidator implements ConstraintValidator<SchoolEmail, St
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
 
-        if (value == null || value.isBlank()) {
-            return false;
+        if (value == null) {
+            return true;
         }
         return value.endsWith(".edu");
     }
