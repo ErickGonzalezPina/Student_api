@@ -4,7 +4,6 @@ import com.erick.student_api.repository.StudentRepository;
 import com.erick.student_api.dto.*;
 import com.erick.student_api.exception.*;
 import com.erick.student_api.model.Student;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +70,7 @@ public class StudentService {
     }
 
     // POST Request Logic
-    public StudentResponse addStudent(@Valid StudentRequest request) {
+    public StudentResponse addStudent(StudentRequest request) {
         log.info("Creating new student");
         Student savedStudent = studentRepository.save(mapToStudent(request));
         log.info("Student {} created successfully", savedStudent.getStudentID());
@@ -79,7 +78,7 @@ public class StudentService {
     }
 
     // PUT Request Logic
-    public StudentResponse updateStudent(@Positive long id, @Valid StudentRequest request) {
+    public StudentResponse updateStudent(@Positive long id, StudentRequest request) {
         log.info("Updating student with id {}", id);
 
         Student student = studentRepository.findById(id)
@@ -99,7 +98,7 @@ public class StudentService {
     }
 
     // PATCH Request Logic
-    public StudentResponse updateStudentAttribute(@Positive long id, @Valid StudentPatchRequest request) {
+    public StudentResponse updateStudentAttribute(@Positive long id, StudentPatchRequest request) {
         log.info("Updating student with id {} attributes", id);
 
         Student student = studentRepository.findById(id)
