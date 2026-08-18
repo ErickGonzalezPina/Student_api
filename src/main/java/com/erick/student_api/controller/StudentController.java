@@ -3,7 +3,8 @@ package com.erick.student_api.controller;
 import com.erick.student_api.dto.*;
 import com.erick.student_api.service.StudentService;
 
-import jakarta.validation.Valid;
+import com.erick.student_api.validation.group.OnCreate;
+import com.erick.student_api.validation.group.OnUpdate;
 import jakarta.validation.constraints.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,8 @@ public class StudentController {
 
     // POST Requests
     @PostMapping
-    public ResponseEntity<StudentResponse> addStudent(@Valid @RequestBody StudentRequest request) {
+    public ResponseEntity<StudentResponse> addStudent(
+            @Validated(OnCreate.class) @RequestBody StudentRequest request) {
 
         StudentResponse student = service.addStudent(request);
         URI location = URI.create("/api/v1/students/" + student.studentID());
@@ -53,7 +55,7 @@ public class StudentController {
     @PutMapping("/{id}")
     public ResponseEntity<StudentResponse> updateStudent(
             @PathVariable @Positive long id,
-            @Valid @RequestBody StudentRequest request) {
+            @Validated(OnUpdate.class) @RequestBody StudentRequest request) {
 
         return ResponseEntity.ok(service.updateStudent(id, request));
     }
@@ -61,7 +63,7 @@ public class StudentController {
     @PatchMapping("/{id}")
     public ResponseEntity<StudentResponse> updateStudentAttribute(
             @PathVariable @Positive long id,
-            @Valid @RequestBody StudentPatchRequest request) {
+            @Validated(OnUpdate.class) @RequestBody StudentPatchRequest request) {
 
         return ResponseEntity.ok(service.updateStudentAttribute(id, request));
     }
