@@ -19,6 +19,7 @@ public record StudentRequest (
     @NotBlank(groups = {OnCreate.class, OnUpdate.class})
     String course,
 
+    @NotBlank(groups = {OnCreate.class, OnUpdate.class})
     @Email(groups = {OnCreate.class, OnUpdate.class})
     @SchoolEmail(groups = {OnCreate.class, OnUpdate.class})
      String email
