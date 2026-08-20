@@ -10,8 +10,10 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,11 +27,27 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> onBadRequest(HttpMessageNotReadableException ex) {
         log.warn("Response body could not be deserialized");
 
+        String message = "Malformed JSON request";
+        Throwable cause = ex.getMostSpecificCause();
+
+        if (cause instanceof InvalidFormatException formatException
+                && formatException.getTargetType() != null
+                && formatException.getTargetType().isEnum() ) {
+
+            String allowedValues = Arrays.stream(
+                            formatException.getTargetType().getEnumConstants())
+                    .map(Object::toString)
+                    .reduce((first, second) -> first + ", " + second)
+                    .orElse("");
+
+            message = "Invalid semester value. Allowed values: " + allowedValues;
+        }
+
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 400,
                 "Bad Request",
-                "Invalid semester value. Allowed values: SPRING, SUMMER, FALL.",
+                message,
                 Map.of()
         );
         return ResponseEntity.badRequest().body(error);
