@@ -2,12 +2,10 @@ package com.erick.student_api.mapper;
 
 import com.erick.student_api.dto.*;
 import com.erick.student_api.model.Student;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface StudentMapper {
 
     StudentResponse studentToStudentResponse(Student student);
