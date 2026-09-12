@@ -123,4 +123,16 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
+
+    @ExceptionHandler(StudentAlreadyExistException.class)
+    public ResponseEntity<ErrorResponse> onStudentAlreadyExist(Exception ex) {
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                400,
+                "Bad Request",
+                ex.getMessage(),
+                Map.of()
+        );
+        return ResponseEntity.badRequest().body(error);
+    }
 }

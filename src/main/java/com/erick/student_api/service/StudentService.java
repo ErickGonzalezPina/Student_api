@@ -62,6 +62,11 @@ public class StudentService {
     public StudentResponse addStudent(StudentRequest request) {
         log.info("Creating new student");
 
+        // throw error if a user already has that email
+        if (studentRepository.existsByEmail(request.email())) {
+            throw new StudentAlreadyExistException(request.email());
+        }
+
         Student student = studentMapper.studentRequestToStudent(request);
         Student savedStudent = studentRepository.save(student);
 
