@@ -40,7 +40,8 @@ public class GlobalExceptionHandler {
                     .reduce((first, second) -> first + ", " + second)
                     .orElse("");
 
-            message = "Invalid semester value. Allowed values: " + allowedValues;
+            String enumName = formatException.getTargetType().getSimpleName();
+            message = String.format("Invalid %s value. Allowed values: [%s]", enumName, allowedValues);
         }
 
         ErrorResponse error = new ErrorResponse(

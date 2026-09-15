@@ -1,5 +1,6 @@
 package com.erick.student_api.dto;
 
+import com.erick.student_api.enums.Course;
 import com.erick.student_api.enums.Semester;
 import com.erick.student_api.validation.annotation.SchoolEmail;
 import com.erick.student_api.validation.group.OnCreate;
@@ -16,8 +17,8 @@ public record StudentRequest (
     @NotNull(groups = {OnCreate.class, OnUpdate.class})
     Semester semester,
 
-    @NotBlank(groups = {OnCreate.class, OnUpdate.class})
-    String course,
+    @NotNull(groups = {OnCreate.class, OnUpdate.class})
+    Course course,
 
     @NotBlank(groups = {OnCreate.class, OnUpdate.class})
     @Email(groups = {OnCreate.class, OnUpdate.class})

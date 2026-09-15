@@ -1,6 +1,7 @@
 package com.erick.student_api.dto;
 
 
+import com.erick.student_api.enums.Course;
 import com.erick.student_api.enums.Semester;
 
 public record StudentResponse (
@@ -9,6 +10,6 @@ public record StudentResponse (
     long studentID,
     String name,
     Semester semester,
-    String course,
+    Course course,
     String email
 ) {}

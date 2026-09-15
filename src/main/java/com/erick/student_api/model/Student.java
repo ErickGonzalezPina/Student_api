@@ -1,5 +1,6 @@
 package com.erick.student_api.model;
 
+import com.erick.student_api.enums.Course;
 import com.erick.student_api.enums.Semester;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,12 +25,13 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private Semester semester;
     @Setter
-    private String course;
+    @Enumerated(EnumType.STRING)
+    private Course course;
     @Setter
     private String email;
 
     // Constructor
-    public Student(String name, Semester semester, String course, String email) {
+    public Student(String name, Semester semester, Course course, String email) {
         this.name = name;
         this.semester = semester;
         this.course = course;

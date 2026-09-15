@@ -1,6 +1,6 @@
 package com.erick.student_api.dto;
 
-
+import com.erick.student_api.enums.Course;
 import com.erick.student_api.enums.Semester;
 import com.erick.student_api.validation.annotation.*;
 import com.erick.student_api.validation.group.OnUpdate;
@@ -15,8 +15,7 @@ public record StudentPatchRequest (
 
     Semester semester,
 
-    @Size(min=1, max=50, message="Course cant be empty", groups = OnUpdate.class)
-    String course,
+    Course course,
 
     @Email(groups = OnUpdate.class)
     @SchoolEmail(groups = OnUpdate.class)
