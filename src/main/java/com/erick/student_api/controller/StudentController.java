@@ -26,10 +26,10 @@ public class StudentController {
         this.service = service;
     }
 
-    // GET Requests
+    // GET
     @GetMapping
-    public ResponseEntity<List<StudentResponse>> getAllStudents() {
-        return ResponseEntity.ok(service.getAllStudents());
+    public ResponseEntity<List<StudentResponse>> searchStudents(@ModelAttribute StudentFilter filter) {
+        return ResponseEntity.ok(service.searchStudents(filter));
     }
 
     @GetMapping("/{id}")
@@ -37,7 +37,7 @@ public class StudentController {
         return ResponseEntity.ok(service.getStudentById(id));
     }
 
-    // POST Requests
+    // POST
     @PostMapping
     public ResponseEntity<StudentResponse> addStudent(
             @Validated(OnCreate.class) @RequestBody StudentRequest request) {
@@ -51,7 +51,7 @@ public class StudentController {
                 .body(student);
     }
 
-    // PUT & PATCH Requests
+    // PUT & PATCH
     @PutMapping("/{id}")
     public ResponseEntity<StudentResponse> updateStudent(
             @PathVariable @Positive long id,

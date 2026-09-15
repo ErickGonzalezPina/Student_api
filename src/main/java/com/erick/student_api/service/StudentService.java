@@ -5,9 +5,11 @@ import com.erick.student_api.repository.StudentRepository;
 import com.erick.student_api.dto.*;
 import com.erick.student_api.exception.*;
 import com.erick.student_api.model.Student;
+import static com.erick.student_api.specification.StudentSpecification.*;
 import jakarta.validation.constraints.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import java.util.List;
@@ -26,23 +28,28 @@ public class StudentService {
     public StudentService(
             StudentRepository studentRepository,
             StudentMapper studentMapper) {
-
         this.studentRepository = studentRepository;
         this.studentMapper = studentMapper;
     }
 
 
     // GET Requests Logic
-    public List<StudentResponse> getAllStudents() {
-        log.info("Getting all students");
+    public List<StudentResponse> searchStudents(StudentFilter filter) {
+        // (root, query, cb) -> cb.conjunction() creates a wrapper that means "1=1" (always true)
+        Specification<Student> specification = Specification.where(
+                (root, query, cb) -> cb.conjunction()
+        );
 
-        List<StudentResponse> students = studentRepository.findAll()
+        if (filter.course() != null) {
+            specification = specification.and(hasCourse(filter.course()));
+        }
+        if (filter.semester() != null) {
+            specification = specification.and(hasSemester(filter.semester()));
+        }
+        return studentRepository.findAll(specification)
                 .stream()
                 .map(studentMapper::studentToStudentResponse)
                 .toList();
-
-        log.debug("Retrieved {} students", students.size());
-        return students;
     }
 
     public StudentResponse getStudentById(@Positive long id) {
