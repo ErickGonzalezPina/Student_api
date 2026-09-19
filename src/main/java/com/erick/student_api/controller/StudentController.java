@@ -6,6 +6,9 @@ import com.erick.student_api.service.StudentService;
 import com.erick.student_api.validation.group.OnCreate;
 import com.erick.student_api.validation.group.OnUpdate;
 import jakarta.validation.constraints.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,8 +31,11 @@ public class StudentController {
 
     // GET
     @GetMapping
-    public ResponseEntity<List<StudentResponse>> searchStudents(@ModelAttribute StudentFilter filter) {
-        return ResponseEntity.ok(service.searchStudents(filter));
+    public ResponseEntity<Page<StudentResponse>> searchStudents(
+            @ModelAttribute StudentFilter filter,
+            @PageableDefault(size = 20, page = 0) Pageable pageable) {
+
+        return ResponseEntity.ok(service.searchStudents(filter, pageable));
     }
 
     @GetMapping("/{id}")

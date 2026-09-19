@@ -9,6 +9,8 @@ import static com.erick.student_api.specification.StudentSpecification.*;
 import jakarta.validation.constraints.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -51,14 +53,13 @@ public class StudentService {
 
 
     // GET Requests Logic
-    public List<StudentResponse> searchStudents(StudentFilter filter) {
+    public Page<StudentResponse> searchStudents(StudentFilter filter, Pageable pageable) {
 
         Specification<Student> specification = buildStudentSpecification(filter);
 
-        return studentRepository.findAll(specification)
-                .stream()
-                .map(studentMapper::studentToStudentResponse)
-                .toList();
+        Page<Student> studentsPage = studentRepository.findAll(specification, pageable);
+
+        return studentsPage.map(studentMapper::studentToStudentResponse);
     }
 
     public StudentResponse getStudentById(@Positive long id) {
