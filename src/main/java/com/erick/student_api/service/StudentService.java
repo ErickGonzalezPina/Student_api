@@ -53,13 +53,21 @@ public class StudentService {
 
 
     // GET Requests Logic
-    public Page<StudentResponse> searchStudents(StudentFilter filter, Pageable pageable) {
+    public PageResponse<StudentResponse> searchStudents(StudentFilter filter, Pageable pageable) {
 
         Specification<Student> specification = buildStudentSpecification(filter);
 
         Page<Student> studentsPage = studentRepository.findAll(specification, pageable);
+        // convert the list of Student to StudentResponse
+        Page<StudentResponse> responsePage = studentsPage.map(studentMapper::studentToStudentResponse);
 
-        return studentsPage.map(studentMapper::studentToStudentResponse);
+        return new PageResponse<>(
+                responsePage.getContent(),
+                responsePage.getNumber(),
+                responsePage.getSize(),
+                responsePage.getTotalElements(),
+                responsePage.getTotalPages()
+        );
     }
 
     public StudentResponse getStudentById(@Positive long id) {

@@ -31,7 +31,7 @@ public class StudentController {
 
     // GET
     @GetMapping
-    public ResponseEntity<Page<StudentResponse>> searchStudents(
+    public ResponseEntity<PageResponse<StudentResponse>> searchStudents(
             @ModelAttribute StudentFilter filter,
             @PageableDefault(size = 20, page = 0) Pageable pageable) {
 
