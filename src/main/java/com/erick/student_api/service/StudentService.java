@@ -32,20 +32,29 @@ public class StudentService {
         this.studentMapper = studentMapper;
     }
 
+    // Helper Functions
+    public Specification<Student> buildStudentSpecification(StudentFilter filter) {
 
-    // GET Requests Logic
-    public List<StudentResponse> searchStudents(StudentFilter filter) {
-        // (root, query, cb) -> cb.conjunction() creates a wrapper that means "1=1" (always true)
+        // (root, query, cb) -> cb.conjunction() creates a wrapper that means "WHERE 1=1" (always true)
         Specification<Student> specification = Specification.where(
                 (root, query, cb) -> cb.conjunction()
         );
-
+        // Add more conditionals "WHERE 1=1 AND ..."
         if (filter.course() != null) {
             specification = specification.and(hasCourse(filter.course()));
         }
         if (filter.semester() != null) {
             specification = specification.and(hasSemester(filter.semester()));
         }
+        return specification;
+    }
+
+
+    // GET Requests Logic
+    public List<StudentResponse> searchStudents(StudentFilter filter) {
+
+        Specification<Student> specification = buildStudentSpecification(filter);
+
         return studentRepository.findAll(specification)
                 .stream()
                 .map(studentMapper::studentToStudentResponse)
