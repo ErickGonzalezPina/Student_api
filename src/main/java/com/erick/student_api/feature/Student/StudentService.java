@@ -60,8 +60,7 @@ public class StudentService {
             log.debug("Synchronizing courses for student {}", student.getStudentID());
 
             List<Course> courses = courseRepository.findAllById(courseIds);
-            student.clearCourses();
-            courses.forEach(student::addCourse);
+            student.syncCourses(courses);
         }
     }
 

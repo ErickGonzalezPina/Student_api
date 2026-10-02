@@ -63,4 +63,9 @@ public class Student {
         this.enrollments.forEach(enrollment -> enrollment.getCourse().getEnrollments().remove(enrollment));
         this.enrollments.clear();
     }
+
+    public void syncCourses(java.util.Collection<Course> courses) {
+        this.clearCourses();
+        courses.forEach(this::addCourse);
+    }
 }
