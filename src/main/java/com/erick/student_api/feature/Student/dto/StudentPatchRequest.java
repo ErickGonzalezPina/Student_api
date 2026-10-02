@@ -1,10 +1,10 @@
 package com.erick.student_api.feature.Student.dto;
 
-import com.erick.student_api.common.enums.*;
+import com.erick.student_api.common.enums.Semester;
 import com.erick.student_api.feature.Student.validation.annotation.*;
 import com.erick.student_api.common.validation.group.OnUpdate;
 import jakarta.validation.constraints.*;
-
+import java.util.List;
 
 
 public record StudentPatchRequest (
@@ -14,7 +14,7 @@ public record StudentPatchRequest (
 
     Semester semester,
 
-    Course course,
+    List<Long> courseIds,
 
     @Email(groups = OnUpdate.class)
     @SchoolEmail(groups = OnUpdate.class)

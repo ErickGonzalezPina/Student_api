@@ -1,6 +1,8 @@
 package com.erick.student_api.feature.Student;
 
 import com.erick.student_api.common.dto.PageResponse;
+import com.erick.student_api.feature.Course.Course;
+import com.erick.student_api.feature.Course.CourseRepository;
 import com.erick.student_api.feature.Student.mapper.StudentMapper;
 import com.erick.student_api.feature.Student.dto.*;
 import com.erick.student_api.common.exception.*;
@@ -12,8 +14,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 
 @Validated
 @Service
@@ -23,30 +27,42 @@ public class StudentService {
 
     // Repository Injection
     private final StudentRepository studentRepository;
+    private final CourseRepository courseRepository;
     private final StudentMapper studentMapper;
 
     public StudentService(
             StudentRepository studentRepository,
+            CourseRepository courseRepository,
             StudentMapper studentMapper) {
         this.studentRepository = studentRepository;
+        this.courseRepository = courseRepository;
         this.studentMapper = studentMapper;
     }
 
     // Helper Functions
     public Specification<Student> buildStudentSpecification(StudentFilter filter) {
-
         // (root, query, cb) -> cb.conjunction() creates a wrapper that means "WHERE 1=1" (always true)
         Specification<Student> specification = Specification.where(
                 (root, query, cb) -> cb.conjunction()
         );
         // Add more conditionals "WHERE 1=1 AND ..."
-        if (filter.course() != null) {
-            specification = specification.and(hasCourse(filter.course()));
+        if (filter.courseId() != null) {
+            specification = specification.and(hasCourse(filter.courseId()));
         }
         if (filter.semester() != null) {
             specification = specification.and(hasSemester(filter.semester()));
         }
         return specification;
+    }
+
+    private void synchronizeStudentCourses(Student student, List<Long> courseIds) {
+        if (courseIds != null) {
+            log.debug("Synchronizing courses for student {}", student.getStudentID());
+
+            List<Course> courses = courseRepository.findAllById(courseIds);
+            student.clearCourses();
+            courses.forEach(student::addCourse);
+        }
     }
 
 
@@ -91,10 +107,33 @@ public class StudentService {
         }
 
         Student student = studentMapper.studentRequestToStudent(request);
+
+        synchronizeStudentCourses(student, request.courseIds());
         Student savedStudent = studentRepository.save(student);
 
         log.info("Student {} created successfully", savedStudent.getStudentID());
         return studentMapper.studentToStudentResponse(savedStudent);
+    }
+
+    @Transactional
+    public void enrollInCourse(@Positive long studentId, @Positive long courseId) {
+        log.info("Enrolling student {} in course {}", studentId, courseId);
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new StudentNotFoundException(studentId));
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException(courseId));
+
+        boolean alreadyEnrolled = student.getEnrollments().stream()
+                .anyMatch(e -> e.getCourse().getId().equals(courseId));
+
+        if (alreadyEnrolled) {
+            log.warn("Student {} is already enrolled in course {}", studentId, courseId);
+        }
+        else {
+            student.addCourse(course);
+            log.info("Student {} enrolled in course {} successfully", studentId, courseId);
+        }
     }
 
     // PUT Request Logic
@@ -108,6 +147,9 @@ public class StudentService {
                 });
 
         studentMapper.updateStudent(request, student);
+
+        synchronizeStudentCourses(student, request.courseIds());
+
         Student savedStudent = studentRepository.save(student);
 
         log.info("Student {} updated successfully", savedStudent.getStudentID());
@@ -125,6 +167,9 @@ public class StudentService {
                 });
 
         studentMapper.updateStudentPartially(request, student);
+
+        synchronizeStudentCourses(student, request.courseIds());
+
         Student savedStudent = studentRepository.save(student);
 
         log.info("Student with id {} partially updated successfully", id);
@@ -142,5 +187,18 @@ public class StudentService {
         }
         log.info("Student {} deleted successfully", id);
         studentRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void unenrollFromCourse(@Positive long studentId, @Positive long courseId) {
+        log.info("Unenrolling student {} from course {}", studentId, courseId);
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new StudentNotFoundException(studentId));
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException(courseId));
+
+        student.removeCourse(course);
+        studentRepository.save(student);
+        log.info("Student {} unenrolled from course {} successfully", studentId, courseId);
     }
 }

@@ -1,10 +1,14 @@
 package com.erick.student_api.feature.Course;
 
 
+import com.erick.student_api.feature.Enrollment.Enrollment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "course")
@@ -25,6 +29,9 @@ public class Course {
 
     @Setter
     private int credits;
+
+    @OneToMany(mappedBy = "course")
+    private Set<Enrollment> enrollments = new HashSet<>();
 
     // Constructor
     public Course(int code, String description, int credits) {

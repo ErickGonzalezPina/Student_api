@@ -80,6 +80,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(EnrollmentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> onEnrollmentNotFound(EnrollmentNotFoundException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                404,
+                "Not Found",
+                ex.getMessage(),
+                Map.of()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> onValidationFailure(MethodArgumentNotValidException ex) {
         // Handle Exceptions caused by @Valid

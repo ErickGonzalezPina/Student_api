@@ -2,7 +2,6 @@ package com.erick.student_api.feature.Student;
 
 import com.erick.student_api.feature.Student.dto.*;
 import com.erick.student_api.common.dto.*;
-
 import com.erick.student_api.common.validation.group.*;
 import jakarta.validation.constraints.*;
 import org.springframework.data.domain.Pageable;
@@ -54,6 +53,15 @@ public class StudentController {
                 .body(student);
     }
 
+    @PostMapping("/{studentId}/courses/{courseId}")
+    public ResponseEntity<Void> enrollInCourse(
+            @PathVariable @Positive long studentId,
+            @PathVariable @Positive long courseId) {
+
+        service.enrollInCourse(studentId, courseId);
+        return ResponseEntity.ok().build();
+    }
+
     // PUT & PATCH
     @PutMapping("/{id}")
     public ResponseEntity<StudentResponse> updateStudent(
@@ -78,4 +86,13 @@ public class StudentController {
         service.deleteStudent(id);
         return ResponseEntity.noContent().build();
     }
-  }
+
+    @DeleteMapping("/{id}/courses/{courseId}")
+    public ResponseEntity<Void> unenrollFromCourse(
+            @PathVariable @Positive long id,
+            @PathVariable @Positive long courseId) {
+
+        service.unenrollFromCourse(id, courseId);
+        return ResponseEntity.noContent().build();
+    }
+}
