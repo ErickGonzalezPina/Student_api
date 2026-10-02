@@ -3,6 +3,8 @@ package com.erick.student_api.feature.Student;
 import com.erick.student_api.feature.Student.dto.*;
 import com.erick.student_api.common.dto.*;
 import com.erick.student_api.common.validation.group.*;
+import com.erick.student_api.feature.Enrollment.EnrollmentService;
+import com.erick.student_api.feature.Enrollment.dto.EnrollmentResponse;
 import jakarta.validation.constraints.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,8 +23,11 @@ public class StudentController {
 
     // Service Injection
     private final StudentService service;
-    public StudentController(StudentService service) {
+    private final EnrollmentService enrollmentService;
+
+    public StudentController(StudentService service, EnrollmentService enrollmentService) {
         this.service = service;
+        this.enrollmentService = enrollmentService;
     }
 
     // GET
@@ -37,6 +42,13 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<StudentResponse> getStudentById(@PathVariable @Positive long id) {
         return ResponseEntity.ok(service.getStudentById(id));
+    }
+
+    @GetMapping("/{id}/enrollments")
+    public ResponseEntity<PageResponse<EnrollmentResponse>> getStudentEnrollments(
+            @PathVariable @Positive long id,
+            @PageableDefault(size = 20) Pageable pageable) {
+        return ResponseEntity.ok(enrollmentService.getEnrollmentsByStudentId(id, pageable));
     }
 
     // POST
