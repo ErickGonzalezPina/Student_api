@@ -2,7 +2,7 @@ package com.erick.student_api.feature.Student.dto;
 
 import com.erick.student_api.common.enums.*;
 import com.erick.student_api.feature.Student.validation.annotation.*;
-import com.erick.student_api.feature.Student.validation.group.OnUpdate;
+import com.erick.student_api.common.validation.group.OnUpdate;
 import jakarta.validation.constraints.*;
 
 

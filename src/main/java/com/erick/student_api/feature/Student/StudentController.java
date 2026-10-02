@@ -3,7 +3,7 @@ package com.erick.student_api.feature.Student;
 import com.erick.student_api.feature.Student.dto.*;
 import com.erick.student_api.common.dto.*;
 
-import com.erick.student_api.feature.Student.validation.group.*;
+import com.erick.student_api.common.validation.group.*;
 import jakarta.validation.constraints.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

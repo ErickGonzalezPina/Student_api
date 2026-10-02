@@ -67,6 +67,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(CourseNotFoundException.class)
+    public ResponseEntity<ErrorResponse> onCourseNotFound(CourseNotFoundException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                404,
+                "Not Found",
+                ex.getMessage(),
+                Map.of()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> onValidationFailure(MethodArgumentNotValidException ex) {
         // Handle Exceptions caused by @Valid
@@ -126,7 +139,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(StudentAlreadyExistException.class)
-    public ResponseEntity<ErrorResponse> onStudentAlreadyExist(Exception ex) {
+    public ResponseEntity<ErrorResponse> onStudentAlreadyExist(StudentAlreadyExistException ex) {
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                400,
+                "Bad Request",
+                ex.getMessage(),
+                Map.of()
+        );
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(CourseAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> onCourseAlreadyExists(CourseAlreadyExistsException ex) {
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 400,

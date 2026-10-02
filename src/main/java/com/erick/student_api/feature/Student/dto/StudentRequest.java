@@ -2,7 +2,7 @@ package com.erick.student_api.feature.Student.dto;
 
 import com.erick.student_api.common.enums.*;
 import com.erick.student_api.feature.Student.validation.annotation.SchoolEmail;
-import com.erick.student_api.feature.Student.validation.group.*;
+import com.erick.student_api.common.validation.group.*;
 import jakarta.validation.constraints.*;
 
 
