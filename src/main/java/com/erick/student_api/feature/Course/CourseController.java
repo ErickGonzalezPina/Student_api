@@ -1,10 +1,13 @@
 package com.erick.student_api.feature.Course;
 
+import com.erick.student_api.common.dto.PageResponse;
 import com.erick.student_api.feature.Course.dto.CourseRequest;
 import com.erick.student_api.feature.Course.dto.CourseResponse;
 import com.erick.student_api.common.validation.group.OnCreate;
 import com.erick.student_api.common.validation.group.OnUpdate;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,8 +30,9 @@ public class CourseController {
 
     // GET
     @GetMapping
-    public ResponseEntity<List<CourseResponse>> getAllCourses() {
-        return ResponseEntity.ok(service.getAllCourses());
+    public ResponseEntity<PageResponse<CourseResponse>> getAllCourses(
+            @PageableDefault(size = 20, page = 0) Pageable pageable) {
+        return ResponseEntity.ok(service.getAllCourses(pageable));
     }
 
     @GetMapping("/{id}")

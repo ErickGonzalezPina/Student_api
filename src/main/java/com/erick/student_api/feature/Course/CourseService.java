@@ -1,5 +1,6 @@
 package com.erick.student_api.feature.Course;
 
+import com.erick.student_api.common.dto.PageResponse;
 import com.erick.student_api.common.exception.CourseAlreadyExistsException;
 import com.erick.student_api.common.exception.CourseNotFoundException;
 import com.erick.student_api.feature.Course.dto.CourseRequest;
@@ -8,6 +9,8 @@ import com.erick.student_api.feature.Course.mapper.CourseMapper;
 import jakarta.validation.constraints.Positive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,11 +32,20 @@ public class CourseService {
     }
 
     // GET Logic
-    public List<CourseResponse> getAllCourses() {
-        log.info("Fetching all courses");
-        return repository.findAll().stream()
-                .map(mapper::courseToCourseResponse)
-                .collect(Collectors.toList());
+    public PageResponse<CourseResponse> getAllCourses(Pageable pageable) {
+        log.info("Fetching all courses with pagination");
+
+        Page<Course> coursesPage = repository.findAll(pageable);
+        // Convert list of Course to CourseResponse within the Page
+        Page<CourseResponse> responsePage = coursesPage.map(mapper::courseToCourseResponse);
+
+        return new PageResponse<>(
+                responsePage.getContent(),
+                responsePage.getNumber(),
+                responsePage.getSize(),
+                responsePage.getTotalElements(),
+                responsePage.getTotalPages()
+        );
     }
 
     public CourseResponse getCourseById(@Positive Long id) {

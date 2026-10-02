@@ -5,5 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
+    // JpaRepository supports offset pagination findAll(Pageable)
+
     boolean existsByCode(int code);
 }
