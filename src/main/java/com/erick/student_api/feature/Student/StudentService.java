@@ -21,6 +21,7 @@ import java.util.List;
 
 @Validated
 @Service
+@Transactional(readOnly = true)
 public class StudentService {
     // Logger
     private static final Logger log  = LoggerFactory.getLogger(StudentService.class);
@@ -97,6 +98,7 @@ public class StudentService {
     }
 
     // POST Request Logic
+    @Transactional
     public StudentResponse addStudent(StudentRequest request) {
         log.info("Creating new student");
 
@@ -136,6 +138,7 @@ public class StudentService {
     }
 
     // PUT Request Logic
+    @Transactional
     public StudentResponse updateStudent(@Positive long id, StudentRequest request) {
         log.info("Updating student with id {}", id);
 
@@ -156,6 +159,7 @@ public class StudentService {
     }
 
     // PATCH Request Logic
+    @Transactional
     public StudentResponse updateStudentAttribute(@Positive long id, StudentPatchRequest request) {
         log.info("Updating student with id {} attributes", id);
 
@@ -177,6 +181,7 @@ public class StudentService {
     }
 
     // DELETE Logic
+    @Transactional
     public void deleteStudent(@Positive long id) {
         log.info("Deleting student with id {}", id);
 

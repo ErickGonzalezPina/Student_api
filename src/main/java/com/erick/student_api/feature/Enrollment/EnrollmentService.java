@@ -10,10 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Service
 @Validated
+@Transactional(readOnly = true)
 public class EnrollmentService {
 
     // Dependency Injection
@@ -64,6 +66,7 @@ public class EnrollmentService {
     }
 
     // PUT logic
+    @Transactional
     public EnrollmentResponse updateEnrollmentGrade(Long id, EnrollmentPatchRequest request) {
         log.info("Updating grade for enrollment id: {}", id);
         Enrollment enrollment = repository.findById(id)

@@ -8,31 +8,16 @@ import com.erick.student_api.feature.Student.dto.*;
 import com.erick.student_api.feature.Student.Student;
 import org.mapstruct.*;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Mapper(componentModel = "spring", uses = {CourseMapper.class}, unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface StudentMapper {
 
-    @Mapping(target = "courses", expression = "java(mapEnrollmentsToCourses(student.getEnrollments()))")
+    @Mapping(target = "courses", source = "enrollments")
     StudentResponse studentToStudentResponse(Student student);
 
-    default List<CourseResponse> mapEnrollmentsToCourses(Set<Enrollment> enrollments) {
-        if (enrollments == null) return null;
-        return enrollments.stream()
-                .map(enrollment -> {
-                    Course course = enrollment.getCourse();
-                    return new CourseResponse(
-                            course.getId(),
-                            course.getCode(),
-                            course.getDescription(),
-                            course.getCredits()
-                    );
-                })
-                .collect(Collectors.toList());
-    }
+    @Mapping(target = ".", source = "course")
+    CourseResponse enrollmentToCourseResponse(Enrollment enrollment);
 
     @Mapping(target = "enrollments", ignore = true)
     Student studentRequestToStudent(StudentRequest studentRequest);

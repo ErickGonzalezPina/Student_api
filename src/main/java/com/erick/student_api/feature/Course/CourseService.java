@@ -12,13 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Validated
 @Service
+@Transactional(readOnly = true)
 public class CourseService {
     private static final Logger log = LoggerFactory.getLogger(CourseService.class);
 
@@ -59,6 +60,7 @@ public class CourseService {
     }
 
     // POST logic
+    @Transactional
     public CourseResponse addCourse(CourseRequest request) {
         log.info("Adding new course with code: {}", request.code());
         if (repository.existsByCode(request.code())) {
@@ -72,6 +74,7 @@ public class CourseService {
     }
 
     // UPDATE logic
+    @Transactional
     public CourseResponse updateCourse(@Positive Long id, CourseRequest request) {
         log.info("Updating course with id: {}", id);
         Course course = repository.findById(id)
@@ -86,6 +89,7 @@ public class CourseService {
     }
 
     // DELETE logic
+    @Transactional
     public void deleteCourse(@Positive Long id) {
         log.info("Deleting course with id: {}", id);
         if (!repository.existsById(id)) {
