@@ -2,10 +2,8 @@ package com.erick.student_api.feature.Student;
 
 import com.erick.student_api.common.dto.PageResponse;
 import com.erick.student_api.feature.Student.mapper.StudentMapper;
-import com.erick.student_api.feature.Student.StudentRepository;
 import com.erick.student_api.feature.Student.dto.*;
 import com.erick.student_api.common.exception.*;
-import com.erick.student_api.feature.Student.Student;
 import static com.erick.student_api.feature.Student.specification.StudentSpecification.*;
 import jakarta.validation.constraints.*;
 import org.slf4j.Logger;
